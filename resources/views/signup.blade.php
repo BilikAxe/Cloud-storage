@@ -1,62 +1,51 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration</title>
-</head>
+
 <body>
     <div class="container">
         <div class="title">Registration</div>
-        <form action="#">
+        <form method="post" action="{{ route('signup') }}">
+            @csrf
             <div class="user_details">
                 <div class="input_pox">
                     <span class="datails">First Name</span>
-                    <input type="text" placeholder="enter your First Name" required>
+                    <input type="text" name="first_name" placeholder="enter your First Name" required>
+                    @error('first_name')
+                    <span class='label-text'>{{ $message }}</span>
+                    @enderror
                 </div>
                 <div class="input_pox">
                     <span class="datails">Last Name</span>
-                    <input type="text" placeholder="enter your Last Name" required>
+                    <input type="text" name="last_name" placeholder="enter your Last Name" required>
+                    @error('last_name')
+                    <span class='label-text'>{{ $message }}</span>
+                    @enderror
                 </div>
                 <div class="input_pox">
                     <span class="datails">Username</span>
-                    <input type="text" placeholder="enter your Username" required>
+                    <input type="text" name="user_name" placeholder="enter your Username" required>
+                    @error('user_name')
+                    <span class='label-text'>{{ $message }}</span>
+                    @enderror
                 </div>
                 <div class="input_pox">
                     <span class="datails">Email</span>
-                    <input type="text" placeholder="enter your Email" required>
+                    <input type="text" name="email" placeholder="enter your Email" required>
+                    @error('email')
+                    <span class='label-text'>{{ $message }}</span>
+                    @enderror
                 </div>
                 <div class="input_pox">
                     <span class="datails">Phone Number</span>
-                    <input type="text" placeholder="enter your Phone" required>
+                    <input type="text" name="phone_number" placeholder="enter your Phone" required>
+                    @error('phone_number')
+                    <span class='label-text'>{{ $message }}</span>
+                    @enderror
                 </div>
                 <div class="input_pox">
                     <span class="datails">Password</span>
-                    <input type="text" placeholder="enter your Password" required>
-                </div>
-                <div class="input_pox">
-                    <span class="datails">Confirm Password</span>
-                    <input type="text" placeholder="Confirm your Password" required>
-                </div>
-            </div>
-            <div class="gender_details">
-                <input type="radio" name="gender" id="dot-1">
-                <input type="radio" name="gender" id="dot-2">
-                <input type="radio" name="gender" id="dot-3">
-                <span class="gender_title"> Gender</span>
-                <div class="category">
-                    <label for="dot-1">
-                        <span class="dot one"></span>
-                        <span class="gender">Mail</span>
-                    </label>
-                    <label for="dot-2">
-                        <span class="dot two"></span>
-                        <span class="gender">Femail</span>
-                    </label>
-                    <label for="dot-3">
-                        <span class="dot three"></span>
-                        <span class="gender">Do not specify</span>
-                    </label>
+                    <input type="password" name="password" placeholder="enter your Password" required>
+                    @error('password')
+                    <span class='label-text'>{{ $message }}</span>
+                    @enderror
                 </div>
             </div>
             <div class="button">
@@ -65,10 +54,14 @@
         </form>
     </div>
 </body>
-</html>
+
 <style>
 
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
+
+    .label-text {
+        color: red;
+    }
 
     *{
         margin: 0;
