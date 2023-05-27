@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SignInRequest;
+use App\Http\Requests\SignUpRequest;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -19,17 +21,8 @@ class UserController extends Controller
     }
 
 
-    public function registrate(Request $request): RedirectResponse
+    public function registrate(SignUpRequest $request): RedirectResponse
     {
-        $request->validate([
-            'first_name' => 'required|string|min:2',
-            'last_name' => 'required|string|min:2',
-            'user_name' => 'required|min:2|unique:users',
-            'email' => 'required|email|unique:users',
-            'phone_number' => 'required|string',
-            'password' => 'required|min:6',
-        ]);
-
         $user = User::create([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
@@ -50,13 +43,9 @@ class UserController extends Controller
     }
 
 
-    public function login(Request $request): RedirectResponse
+    public function login(SignInRequest $request): RedirectResponse
     {
-        $credentials = $request->validate([
-            'user_name' => 'required|string',
-            'password' => 'required|string',
-        ]);
-        if (!Auth::attempt($credentials)){
+        if (!Auth::attempt($request->validated())){
             return back()
                 ->withInput()
                 ->withErrors([
