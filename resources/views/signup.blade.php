@@ -1,58 +1,61 @@
 
 <body>
-    <div class="container">
-        <div class="title">Registration</div>
-        <form method="post" action="{{ route('signup') }}">
-            @csrf
-            <div class="user_details">
-                <div class="input_pox">
-                    <span class="datails">First Name</span>
-                    <input type="text" name="first_name" placeholder="enter your First Name" required>
-                    @error('first_name')
-                    <span class='label-text'>{{ $message }}</span>
-                    @enderror
-                </div>
-                <div class="input_pox">
-                    <span class="datails">Last Name</span>
-                    <input type="text" name="last_name" placeholder="enter your Last Name" required>
-                    @error('last_name')
-                    <span class='label-text'>{{ $message }}</span>
-                    @enderror
-                </div>
-                <div class="input_pox">
-                    <span class="datails">Username</span>
-                    <input type="text" name="user_name" placeholder="enter your Username" required>
-                    @error('user_name')
-                    <span class='label-text'>{{ $message }}</span>
-                    @enderror
-                </div>
-                <div class="input_pox">
-                    <span class="datails">Email</span>
-                    <input type="text" name="email" placeholder="enter your Email" required>
-                    @error('email')
-                    <span class='label-text'>{{ $message }}</span>
-                    @enderror
-                </div>
-                <div class="input_pox">
-                    <span class="datails">Phone Number</span>
-                    <input type="text" name="phone_number" placeholder="enter your Phone" required>
-                    @error('phone_number')
-                    <span class='label-text'>{{ $message }}</span>
-                    @enderror
-                </div>
-                <div class="input_pox">
-                    <span class="datails">Password</span>
-                    <input type="password" name="password" placeholder="enter your Password" required>
-                    @error('password')
-                    <span class='label-text'>{{ $message }}</span>
-                    @enderror
-                </div>
+<div class="container">
+    <div class="title">Registration</div>
+    <form method="post" action="{{ route('signup') }}">
+        @csrf
+        <div class="user_details">
+            <div class="input_pox">
+                <span class="datails">First Name</span>
+                <input type="text" name="first_name" placeholder="enter your First Name" value="{{ old('first_name') }}" required>
+                @error('first_name')
+                <span class='label-text'>{{ $message }}</span>
+                @enderror
             </div>
-            <div class="button">
-                <input type="submit" value="Register">
+            <div class="input_pox">
+                <span class="datails">Last Name</span>
+                <input type="text" name="last_name" placeholder="enter your Last Name" value="{{ old('last_name') }}" required>
+                @error('last_name')
+                <span class='label-text'>{{ $message }}</span>
+                @enderror
             </div>
-        </form>
-    </div>
+            <div class="input_pox">
+                <span class="datails">Username</span>
+                <input type="text" name="user_name" placeholder="enter your Username" value="{{ old('user_name') }}" required>
+                @error('user_name')
+                <span class='label-text'>{{ $message }}</span>
+                @enderror
+            </div>
+            <div class="input_pox">
+                <span class="datails">Email</span>
+                <input type="text" name="email" placeholder="enter your Email" value="{{ old('email') }}" required>
+                @error('email')
+                <span class='label-text'>{{ $message }}</span>
+                @enderror
+            </div>
+            <div class="input_pox">
+                <span class="datails">Phone Number</span>
+                <input type="text" name="phone_number" placeholder="enter your Phone" value="{{ old('phone_number') }}" required>
+                @error('phone_number')
+                <span class='label-text'>{{ $message }}</span>
+                @enderror
+            </div>
+            <div class="input_pox">
+                <span class="datails">Password</span>
+                <input type="password" name="password" placeholder="enter your Password" required>
+                @error('password')
+                <span class='label-text'>{{ $message }}</span>
+                @enderror
+            </div>
+        </div>
+        <div class="button">
+            <input type="submit" value="Register">
+        </div>
+        <p>
+            <a href="{{ route('signin') }}">Sign in</a>
+        </p>
+    </form>
+</div>
 </body>
 
 <style>
@@ -61,6 +64,15 @@
 
     .label-text {
         color: red;
+    }
+
+    a {
+        text-decoration: none;
+        color: #71b8e7;
+    }
+
+    p {
+        margin-top: 50px;
     }
 
     *{

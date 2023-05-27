@@ -5,26 +5,31 @@
     <form method="post" action="{{ route('signin') }}">
         @csrf
         <div class="user-box">
-            <input class="user-box-input" type="text" required>
+            <input class="user-box-input" name="user_name" type="text" value="{{ old('user_name') }}" required>
             <label class="user-box-label">Username</label>
             @error('user_name')
             <span class='label-text'>{{ $message }}</span>
             @enderror
         </div>
         <div class="user-box">
-            <input class="user-box-input" type="password" required>
+            <input class="user-box-input" name="password" type="password" required>
             <label class="user-box-label">Password</label>
-            @error('password')
-            <span class='label-text'>{{ $message }}</span>
-            @enderror
         </div>
-        <button type="submit">Submit</button>
+        <button class="login-box-button" type="submit">Submit</button>
     </form>
+    <p>
+        <a href="{{ route('signup') }}" style="color: white; text-decoration: none;" class="text">Sign up</a>
+    </p>
 </div>
 </body>
 
 
 <style>
+
+    .label-text {
+        color: red;
+    }
+
     .login-page {
         font-family: sans-serif;
         background: #243b55;
@@ -84,15 +89,18 @@
     }
 
     .login-box-button {
+        cursor: pointer;
         position: relative;
         display: inline-block;
         padding: 10px 20px;
-        color: #8ab0df;
+        color: black;
         font-size: 14px;
         text-decoration: none;
         overflow: hidden;
         transition: .5s;
         margin-top: 30px;
+        background: #8ab0df;
+        border-radius: 10px;
     }
 
     .login-box a:hover {
@@ -105,88 +113,6 @@
         display: block;
     }
 
-    .login-box-button span:nth-child(1) {
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 2px;
-        background: linear-gradient(90deg, transparent, #8ab0df);
-        animation: btn-1 1.7s linear infinite;
-    }
-
-    @keyframes btn-1 {
-        0% {
-            left: -100%;
-        }
-
-        50%,
-        100% {
-            left: 100%;
-        }
-    }
-
-    .login-box-button span:nth-child(2) {
-        top: -100%;
-        right: 0;
-        width: 2px;
-        height: 100%;
-        background: linear-gradient(180deg, transparent, #8ab0df);
-        animation: btn-2 1.7s linear infinite;
-        animation-delay: 0.25s;
-    }
-
-    @keyframes btn-2 {
-        0% {
-            top: -100%;
-        }
-
-        50%,
-        100% {
-            top: 100%;
-        }
-    }
-
-    .login-box-button span:nth-child(3) {
-        bottom: 0;
-        right: -100%;
-        width: 100%;
-        height: 2px;
-        background: linear-gradient(270deg, transparent, #8ab0df);
-        animation: btn-3 1.7s linear infinite;
-        animation-delay: 0.5s;
-    }
-
-    @keyframes btn-3 {
-        0% {
-            right: -100%;
-        }
-
-        50%,
-        100% {
-            right: 100%;
-        }
-    }
-
-    .login-box-button span:nth-child(4) {
-        bottom: -100%;
-        left: 0;
-        width: 2px;
-        height: 100%;
-        background: linear-gradient(360deg, transparent, #8ab0df);
-        animation: btn-4 1.7s linear infinite;
-        animation-delay: 0.75s;
-    }
-
-    @keyframes btn-4 {
-        0% {
-            bottom: -100%;
-        }
-
-        50%,
-        100% {
-            bottom: 100%;
-        }
-    }
     @media screen and (max-width: 576px) and (min-width: 400px) {
         .login-box {
             width: 250px;

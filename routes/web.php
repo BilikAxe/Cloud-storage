@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MainController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -22,9 +23,11 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::get('/signin', [UserController::class, 'signIn'])->middleware('guest')->name('signin');
-Route::get('/signup', [UserController::class, 'signUp'])->middleware('guest')->name('signup');
-Route::get('/home', [HomeController::class, 'index'])->middleware('auth')->name('home');
+Route::get('/signin', [UserController::class, 'signIn'])->name('signin');
+Route::get('/signup', [UserController::class, 'signUp'])->name('signup');
+Route::get('/main', [MainController::class, 'openMain'])->middleware('auth')->name('main');
 
-Route::post('/signup', [UserController::class, 'registrate'])->middleware('guest');;
-Route::post('/sigin', [UserController::class, 'login'])->middleware('guest');
+Route::post('/signup', [UserController::class, 'registrate']);
+Route::post('/signin', [UserController::class, 'login']);
+Route::post('/main', [MainController::class, 'addFile'])->middleware('auth')->name('add');
+
