@@ -10,6 +10,7 @@
 
 <style>
     form {
+        align-content: center;
         display: flex;
     }
 </style>

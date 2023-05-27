@@ -11,13 +11,15 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('files', function (Blueprint $table) {
             $table->id()->autoIncrement();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->double('size');
-            $table->string('owner');
+            $table->integer('user_id')->unsigned()->index();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('path');
             $table->timestamps();
         });
     }
@@ -27,7 +29,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('files');
     }

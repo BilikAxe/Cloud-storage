@@ -28,7 +28,7 @@ class SignUpRequest extends FormRequest
             'last_name' => 'required|string|min:2',
             'user_name' => 'required|min:2|unique:users',
             'email' => 'required|email|unique:users',
-            'phone_number' => 'required|string',
+            'phone_number' => 'required|int',
             'password' => 'required|min:6',
         ];
     }
