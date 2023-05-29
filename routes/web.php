@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\MainController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -25,9 +25,9 @@ Auth::routes();
 
 Route::get('/signin', [UserController::class, 'signIn'])->name('signin');
 Route::get('/signup', [UserController::class, 'signUp'])->name('signup');
-Route::get('/main', [MainController::class, 'openMain'])->middleware('auth')->name('main');
+Route::get('/main', [FileController::class, 'openMain'])->middleware('auth')->name('main');
 
 Route::post('/signup', [UserController::class, 'registrate']);
 Route::post('/signin', [UserController::class, 'login']);
-Route::post('/main', [MainController::class, 'addFile'])->middleware('auth')->name('add');
+Route::post('/main', [FileController::class, 'addFile'])->middleware('auth')->name('add');
 
