@@ -25,9 +25,11 @@ Auth::routes();
 
 Route::get('/signin', [UserController::class, 'signIn'])->name('signin');
 Route::get('/signup', [UserController::class, 'signUp'])->name('signup');
-Route::get('/main', [FileController::class, 'openMain'])->middleware('auth')->name('main');
+Route::get('/file', [FileController::class, 'openHomePage'])->middleware('auth')->name('main');
+Route::post('/storage', [FileController::class, 'openFile'])->middleware('auth')->name('open');
 
 Route::post('/signup', [UserController::class, 'registrate']);
 Route::post('/signin', [UserController::class, 'login']);
-Route::post('/main', [FileController::class, 'addFile'])->middleware('auth')->name('add');
+Route::post('/file', [FileController::class, 'addFile'])->middleware('auth')->name('add');
+
 

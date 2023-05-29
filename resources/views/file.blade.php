@@ -10,13 +10,16 @@
     <button type="submit">Save</button>
 </form>
 @foreach($files as $file)
-    <div class="files">
-        <table>
-            <th> {{ $file->name }} </th>
-            <th> {{ $file->size }} </th>
-            <th> {{ $file->user_id }} </th>
-        </table>
-    </div>
+    <form method="post" action="{{ route('open') }}">
+        <div class="files">
+            <table>
+                <th> {{ $file->name }} </th>
+                <th> {{ $file->size }} </th>
+                <th> {{ $file->user_id }} </th>
+            </table>
+        </div>
+        <button type="submit" name="file" value="{{ $file->id }}">Open</button>
+    </form>
 @endforeach
 
 <style>

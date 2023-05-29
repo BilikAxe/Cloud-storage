@@ -12,27 +12,21 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller
 {
-    public function openMain(): Factory|View|Application
+    public function openHomePage(): Factory|View|Application
     {
-        $files = $this->getFiles();
+        $files = File::all()->where('user_id', Auth::id());
 
 //        dd($files);
-        return view('main', ['files' => $files]);
+        return view('file', ['files' => $files]);
     }
+
 
     public function addFile(FileRequest $request): RedirectResponse
     {
-        if (!$request->hasFile('file')) {
-            return back()
-                ->withInput()
-                ->withErrors([
-                    'file' => 'File not selected'
-                ]);
-        }
-
         $file = $request->file('file');
         $name = $file->getClientOriginalName();
         $path = $file->store('files', 'public');
@@ -56,8 +50,8 @@ class FileController extends Controller
     }
 
 
-    public function getFiles(): Collection
+    public function openFile(Request $request)
     {
-        return DB::table('files')->where('user_id', Auth::id())->get();
+        dd($request);
     }
 }
