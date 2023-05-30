@@ -10,19 +10,34 @@
     <button type="submit">Save</button>
 </form>
 @foreach($files as $file)
-    <form method="post" action="{{ route('open') }}">
-        <div class="files">
-            <table>
-                <th> {{ $file->name }} </th>
-                <th> {{ $file->size }} </th>
-                <th> {{ $file->user_id }} </th>
-            </table>
-        </div>
-        <button type="submit" name="file" value="{{ $file->id }}">Open</button>
-    </form>
+    <div class="files">
+        <table>
+            <td> {{ $file->name }} </td>
+            <td> {{ $file->size }} </td>
+            <td> {{ Auth::user()->user_name }} </td>
+
+            <a href="{{ asset("/storage/$file->path") }}">Open</a>
+            <form action="{{ route("download") }}" method="post">
+                @csrf
+                <input type="hidden" name="fileId" value="{{ $file->id }}" >
+                <button class="btn" type="submit">Download</button>
+            </form>
+        </table>
+    </div>
 @endforeach
 
 <style>
+
+    .btn {
+        margin-left: 20px;
+    }
+
+    form {
+        display: flex;
+        align-items: center;
+        justify-content: center
+    }
+
     .label-text {
         color: red;
     }
@@ -30,5 +45,30 @@
     form {
         align-content: center;
         display: flex;
+    }
+
+    .files {
+        display: flex;
+    }
+
+    div {
+        display: flex;
+        align-items: center;
+        justify-content: center
+    }
+
+    a {
+        margin-left: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center
+    }
+
+    th {
+        margin: 150px;
+    }
+
+    table {
+        padding: 20px;
     }
 </style>

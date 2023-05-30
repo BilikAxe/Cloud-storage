@@ -9,10 +9,10 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+
 
 class FileController extends Controller
 {
@@ -20,7 +20,6 @@ class FileController extends Controller
     {
         $files = File::all()->where('user_id', Auth::id());
 
-//        dd($files);
         return view('file', ['files' => $files]);
     }
 
@@ -50,8 +49,13 @@ class FileController extends Controller
     }
 
 
-    public function openFile(Request $request)
+    public function downloadFile(Request $request): BinaryFileResponse
     {
-        dd($request);
+        $fileId = $request->get('fileId');
+        $fileArray = File::find($fileId)->toArray();
+
+        $path = public_path() . '/storage/' . $fileArray['path'];
+
+        return response()->download($path);
     }
 }
