@@ -5,18 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class File extends Model
+class Directory extends Model
 {
     use HasFactory;
 
-    protected $table = 'files';
-
+    protected $table = 'directories';
 
     protected $fillable = [
         'name',
-        'size',
         'user_id',
-        'path',
-        'directory_id',
+        'parent',
     ];
 }

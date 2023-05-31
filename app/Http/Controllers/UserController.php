@@ -32,7 +32,7 @@ class UserController extends Controller
         ]);
 
         Auth::login($user);
-        return redirect()->route('signin');
+        return redirect()->route('main');
     }
 
 

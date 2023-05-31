@@ -14,12 +14,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('files', function (Blueprint $table) {
-            $table->id()->autoIncrement();
+            $table->id();
             $table->string('name')->unique();
             $table->double('size');
             $table->integer('user_id')->unsigned()->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('path');
+            $table->integer('directory_id')->unsigned()->index();
+            $table->foreign('directory_id')->references('id')->on('directories')->onDelete('cascade');
             $table->timestamps();
         });
     }

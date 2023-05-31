@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\DirectoryController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -28,7 +28,8 @@ Route::get('/signup', [UserController::class, 'signUp'])->name('signup');
 Route::get('/file', [FileController::class, 'openHomePage'])->middleware('auth')->name('main');
 
 
-Route::post('/storage')->middleware('auth')->name('open');
+Route::post('/directory', [DirectoryController::class, 'create'])->middleware('auth')->name('directory');
+Route::post('/storage')->middleware('auth');
 Route::post('/download', [FileController::class, 'downloadFile'])->middleware('auth')->name('download');
 Route::post('/signup', [UserController::class, 'registrate']);
 Route::post('/signin', [UserController::class, 'login']);
