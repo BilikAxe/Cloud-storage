@@ -7,18 +7,17 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+
 class DirectoryController extends Controller
 {
     public function create(Request $request): RedirectResponse
     {
-//        dd($request->parent);
-
         Directory::create([
             'name' => $request->directoryName,
             'user_id' => Auth::id(),
             'parent' => $request->parent,
         ]);
 
-        return redirect()->route('main');
+        return back();
     }
 }

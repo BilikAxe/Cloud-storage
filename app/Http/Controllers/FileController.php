@@ -17,12 +17,13 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class FileController extends Controller
 {
-    public function openHomePage(): Factory|View|Application
+    public function openHomePage(int $id=0): Factory|View|Application
     {
-        $files = File::all()->where('user_id', Auth::id());
-        $directories = Directory::all()->where('user_id', Auth::id());
+        $files = File::all()->where('user_id', Auth::id())->where('parent', $id);
+        $directories = Directory::all()->where('user_id', Auth::id())->where('parent', $id);
 
         return view('file', [
+            'id' => $id,
             'files' => $files,
             'directories' => $directories,
         ]);
@@ -36,24 +37,24 @@ class FileController extends Controller
         $path = $file->store('files', 'public');
         $userId = Auth::id();
         $size = $file->getSize();
-        $directoryId = $request->directoryId;
+        $parent = $request->parent;
 
-        $files = File::all()->where('name', $name);
-
-        foreach ($files as $file) {
-            if ($file->name === $name) {
-                return back()->withInput()->withErrors([
-                    'file' => 'Файл с таким именем уже существует'
-                ]);
-            }
-        }
+//        $files = File::all()->where('name', $name);
+//
+//        foreach ($files as $file) {
+//            if ($file->name === $name && $file->parent === $parent) {
+//                return back()->withInput()->withErrors([
+//                    'file' => 'Файл с таким именем уже существует'
+//                ]);
+//            }
+//        }
 
         File::create([
             'name' => $name,
             'size' => $size,
             'user_id' => $userId,
             'path' => $path,
-            'directory_id' => 3,
+            'parent' => $parent,
         ]);
 
         return back();
@@ -70,6 +71,6 @@ class FileController extends Controller
 
 
         return response()->download($path);
-//        return Storage::download($path);
+//        return Storage::download($file->path);
     }
 }
