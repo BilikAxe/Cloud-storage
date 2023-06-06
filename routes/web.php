@@ -23,17 +23,26 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::get('/signin', [UserController::class, 'signIn'])->name('signin');
-Route::get('/signup', [UserController::class, 'signUp'])->name('signup');
-Route::get('/file/{id?}', [FileController::class, 'openHomePage'])->middleware('auth')->name('main');
+Route::middleware('guest')->group(function ()
+{
+    Route::get('/signin', [UserController::class, 'signIn'])->name('signin');
+    Route::post('/signin', [UserController::class, 'login']);
+
+    Route::get('/signup', [UserController::class, 'signUp'])->name('signup');
+    Route::post('/signup', [UserController::class, 'registrate']);
+});
 
 
-Route::post('/signin', [UserController::class, 'login']);
-Route::post('/signup', [UserController::class, 'registrate']);
-Route::post('/file', [FileController::class, 'addFile'])->middleware('auth')->name('add');
-Route::post('/storage')->middleware('auth');
-Route::post('/download', [FileController::class, 'downloadFile'])->middleware('auth')->name('download');
-Route::post('/directory', [DirectoryController::class, 'create'])->middleware('auth')->name('directory');
+Route::middleware('auth')->group(function ()
+{
+    Route::post('/file', [FileController::class, 'addFile'])->name('add');
+    Route::post('/download', [FileController::class, 'downloadFile'])->name('download');
+
+
+    Route::get('/directory/{id?}', [DirectoryController::class, 'openHomePage'])->name('main');
+    Route::post('/directory', [DirectoryController::class, 'create'])->name('directory');
+});
+
 
 
 

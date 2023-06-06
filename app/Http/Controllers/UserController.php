@@ -23,12 +23,12 @@ class UserController extends Controller
     public function registrate(SignUpRequest $request): RedirectResponse
     {
         $user = User::create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'user_name' => $request->user_name,
-            'email' => $request->email,
-            'phone_number' => $request->phone_number,
-            'password' => Hash::make($request->password),
+            'first_name' => $request->get('first_name'),
+            'last_name' => $request->get('last_name'),
+            'user_name' => $request->get('user_name'),
+            'email' => $request->get('email'),
+            'phone_number' => $request->get('phone_number'),
+            'password' => Hash::make($request->get('password')),
         ]);
 
         Auth::login($user);

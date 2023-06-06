@@ -14,6 +14,6 @@ class Directory extends Model
     protected $fillable = [
         'name',
         'user_id',
-        'parent',
+        'parent_id',
     ];
 }

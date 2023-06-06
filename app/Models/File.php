@@ -17,6 +17,12 @@ class File extends Model
         'size',
         'user_id',
         'path',
-        'parent',
+        'directory_id',
     ];
+
+
+    public function getPublicPath(): string
+    {
+        return $this->path;
+    }
 }

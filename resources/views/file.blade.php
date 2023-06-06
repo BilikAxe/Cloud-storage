@@ -3,7 +3,10 @@
         @csrf
         <label>Create directory</label>
         <input type="text" name="directoryName" value="Untitled">
-        <input type="hidden" name="parent" value="{{ $id }}">
+        @error('directoryName')
+        <span class='label-text'>{{ $message }}</span>
+        @enderror
+        <input type="hidden" name="parentId" value="{{ $id }}">
         <button type="submit" >Create</button>
     </form>
 
@@ -12,7 +15,7 @@
         <div class="form-group">
             <lable for="file">Upload file</lable>
             <input type="file" name="file" class="form-control">
-            <input type="hidden" name="parent" value="{{ $id }}"
+            <input type="hidden" name="directoryId" value="{{ $id }}"
             @error('file')
             <span class='label-text'>{{ $message }}</span>
             @enderror
@@ -29,7 +32,7 @@
                 <td> {{ $directory->size }} </td>
                 <td> {{ Auth::user()->user_name }} </td>
 
-                <a href="/file/{{ $directory->id }}">Open</a>
+                <a href="/directory/{{ $directory->id }}">Open</a>
             </table>
         </div>
     @endforeach
@@ -53,6 +56,10 @@
 
 
 <style>
+
+    body {
+        background: lightpink;
+    }
 
     .form-group {
         align-items: center;
