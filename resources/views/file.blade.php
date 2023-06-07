@@ -56,6 +56,9 @@
 
 
 <style>
+    head {
+        float: left;
+    }
 
     body {
         background: lightpink;

@@ -8,13 +8,13 @@ use Illuminate\Support\Facades\Auth;
 
 class FileService
 {
-    public function createFile(UploadedFile $file, ?int $directoryId): void
+    public function createFile(UploadedFile $uploadedFile, ?int $directoryId): void
     {
         File::create([
-            'name'         => $file->getClientOriginalName(),
-            'size'         => $file->getSize(),
+            'name'         => $uploadedFile->getClientOriginalName(),
+            'size'         => $uploadedFile->getSize(),
             'user_id'      => Auth::id(),
-            'path'         => $file->store('files', 'public'),
+            'path'         => $uploadedFile->store('files', 'public'),
             'directory_id' => $directoryId,
         ]);
     }

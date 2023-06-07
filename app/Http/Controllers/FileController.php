@@ -13,12 +13,21 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class FileController extends Controller
 {
+    /**
+     * @throws \Throwable
+     */
     public function addFile(FileRequest $request, FileService $fileService): RedirectResponse
     {
         $file = $request->file('file');
-        $directoryId = $request->get('directoryId');
 
-        $fileService->createFile($file, $directoryId);
+        try {
+            $directoryId = $request->get('directoryId');
+            $fileService->createFile($file, $directoryId);
+
+        } catch (\Throwable $throwable) {
+            report($throwable);
+            throw $throwable;
+        }
 
         return back();
     }
