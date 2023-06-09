@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('user_name')->unique();
             $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
             $table->bigInteger('phone_number');
             $table->string('password');
             $table->timestamps();
