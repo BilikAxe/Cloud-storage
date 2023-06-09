@@ -17,10 +17,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Route::get('/', function () {
-//    return view('welcome');
-//});
-
 Auth::routes();
 
 Route::middleware('guest')->group(function ()
@@ -38,12 +34,13 @@ Route::middleware('auth')->group(function ()
     Route::post('/file', [FileController::class, 'addFile'])->name('add');
     Route::post('/download', [FileController::class, 'downloadFile'])->name('download');
 
-
     Route::get('/directory/{id?}', [DirectoryController::class, 'openHomePage'])->name('main');
     Route::post('/directory', [DirectoryController::class, 'create'])->name('directory');
 });
 
 
+
+Route::get('/email/verify/{id}/{hash}', fn () => 'verify')->middleware(['auth','signed'])->name('verification.verify');
 
 
 

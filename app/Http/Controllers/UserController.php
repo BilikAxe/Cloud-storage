@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SignInRequest;
 use App\Http\Requests\SignUpRequest;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -31,7 +32,10 @@ class UserController extends Controller
             'password' => Hash::make($request->get('password')),
         ]);
 
+        event(new Registered($user));
+
         Auth::login($user);
+
         return redirect()->route('main');
     }
 
