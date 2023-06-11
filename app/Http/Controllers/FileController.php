@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\DownloadRequest;
 use App\Http\Requests\FileRequest;
 use App\Models\File;
-use App\Service\FileService;
+use App\Services\FileService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -13,6 +13,9 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class FileController extends Controller
 {
+    /**
+     * @throws \Throwable
+     */
     public function addFile(FileRequest $request, FileService $fileService): RedirectResponse
     {
         $file = $request->file('file');

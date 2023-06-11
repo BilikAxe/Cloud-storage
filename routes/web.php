@@ -4,7 +4,6 @@ use App\Http\Controllers\DirectoryController;
 use App\Http\Controllers\EmailVerificationNotificationController;
 use App\Http\Controllers\EmailVerificationPromptController;
 use App\Http\Controllers\FileController;
-use App\Http\Controllers\SendController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VerifyEmailController;
 use Illuminate\Support\Facades\Auth;
@@ -58,7 +57,13 @@ Route::middleware('auth')->group(function ()
 });
 
 
-Route::get('send/text', [SendController::class, 'sendText']);
+//Route::post("/message", function (Request $request) {
+//    $message = "Сообщение отправленно на почту.";
+//    $mqService = new RabbitMQService();
+//    $mqService->publish($message);
+//    return view('file');
+//});
 
 
 
+Route::post("/message", [UserController::class, 'registrate']);

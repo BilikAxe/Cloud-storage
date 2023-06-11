@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SignInRequest;
 use App\Http\Requests\SignUpRequest;
 use App\Models\User;
+use App\Services\RabbitMQService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -21,6 +22,9 @@ class UserController extends Controller
     }
 
 
+    /**
+     * @throws \Exception
+     */
     public function registrate(SignUpRequest $request): RedirectResponse
     {
         $user = User::create([
@@ -31,6 +35,10 @@ class UserController extends Controller
             'phone_number' => $request->get('phone_number'),
             'password' => Hash::make($request->get('password')),
         ]);
+
+        $message = "Сообщение отправленно на почту.";
+        $mqService = new RabbitMQService();
+        $mqService->publish($message);
 
         event(new Registered($user));
 
