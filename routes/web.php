@@ -66,4 +66,4 @@ Route::middleware('auth')->group(function ()
 
 
 
-Route::post("/message", [UserController::class, 'registrate']);
+//Route::post("/message", [UserController::class, 'registrate']);

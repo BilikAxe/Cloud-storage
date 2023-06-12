@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
@@ -10,7 +12,7 @@ class RabbitMQService
     /**
      * @throws \Exception
      */
-    public function publish($message): void
+    public function publish(string $message): void
     {
         $connection = new AMQPStreamConnection(env('MQ_HOST'), env('MQ_PORT'), env('MQ_USER'), env('MQ_PASS'), env('MQ_VHOST'));
         $channel = $connection->channel();
@@ -33,7 +35,9 @@ class RabbitMQService
         $connection = new AMQPStreamConnection(env('MQ_HOST'), env('MQ_PORT'), env('MQ_USER'), env('MQ_PASS'), env('MQ_VHOST'));
         $channel = $connection->channel();
         $callback = function ($msg) {
-            echo ' [x] Received ', $msg->body, "\n";
+            $user = User::find($msg->body);
+            event(new Registered($user));
+            echo ' [x] Received ', $user->email, "\n";
         };
         $channel->queue_declare('test_queue', false, false, false, false);
         $channel->basic_consume('test_queue', '', false, true, false, false, $callback);

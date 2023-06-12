@@ -16,6 +16,15 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    private RabbitMQService $rabbitMQService;
+
+
+    public function __construct(RabbitMQService $rabbitMQService)
+    {
+        $this->rabbitMQService = $rabbitMQService;
+    }
+
+
     public function signUp(): Factory|View|Application
     {
         return view('signup');
@@ -36,11 +45,7 @@ class UserController extends Controller
             'password' => Hash::make($request->get('password')),
         ]);
 
-        $message = "Сообщение отправленно на почту.";
-        $mqService = new RabbitMQService();
-        $mqService->publish($message);
-
-        event(new Registered($user));
+        $this->rabbitMQService->publish($user->id);
 
         Auth::login($user);
 
