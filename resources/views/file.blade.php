@@ -33,6 +33,11 @@
                 <td> {{ Auth::user()->user_name }} </td>
 
                 <a href="/directory/{{ $directory->id }}">Open</a>
+                <form action="{{ route("deleteDirectory") }}" method="post">
+                    @csrf
+                    <input type="hidden" name="directoryId" value="{{ $directory->id }}" >
+                    <button class="btn" type="submit">Delete</button>
+                </form>
             </table>
         </div>
     @endforeach
@@ -48,6 +53,11 @@
                     @csrf
                     <input type="hidden" name="fileId" value="{{ $file->id }}" >
                     <button class="btn" type="submit">Download</button>
+                </form>
+                <form action="{{ route("delete") }}" method="post">
+                    @csrf
+                    <input type="hidden" name="fileId" value="{{ $file->id }}" >
+                    <button class="btn" type="submit">Delete</button>
                 </form>
             </table>
         </div>

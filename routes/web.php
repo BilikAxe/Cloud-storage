@@ -41,29 +41,19 @@ Route::middleware('auth')->group(function ()
     Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
         ->middleware('signed')
         ->name('verification.verify');
-    Route::post('/email/verification-notification', [EmailVerificationNotificationController::class, '__invoke'])
-        ->name('verification.send');
 
     Route::post('/file', [FileController::class, 'addFile'])
         ->name('add');
     Route::post('/download', [FileController::class, 'downloadFile'])
         ->name('download');
+    Route::post('/delete', [FileController::class, 'deleteFile'])
+        ->name('delete');
 
     Route::get('/directory/{id?}', [DirectoryController::class, 'openHomePage'])
         ->middleware('verified')
         ->name('main');
     Route::post('/directory', [DirectoryController::class, 'create'])
         ->name('directory');
+    Route::post('/directory/delete', [DirectoryController::class, 'delete'])
+        ->name('deleteDirectory');
 });
-
-
-//Route::post("/message", function (Request $request) {
-//    $message = "Сообщение отправленно на почту.";
-//    $mqService = new RabbitMQService();
-//    $mqService->publish($message);
-//    return view('file');
-//});
-
-
-
-//Route::post("/message", [UserController::class, 'registrate']);

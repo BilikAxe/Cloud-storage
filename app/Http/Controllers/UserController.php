@@ -6,7 +6,6 @@ use App\Http\Requests\SignInRequest;
 use App\Http\Requests\SignUpRequest;
 use App\Models\User;
 use App\Services\RabbitMQService;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -45,7 +44,7 @@ class UserController extends Controller
             'password' => Hash::make($request->get('password')),
         ]);
 
-        $this->rabbitMQService->publish($user->id);
+        $this->rabbitMQService->publish($user->id, 'email');
 
         Auth::login($user);
 

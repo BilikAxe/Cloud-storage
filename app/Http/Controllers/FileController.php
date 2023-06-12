@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\DownloadRequest;
+use App\Http\Requests\FileDeleteRequest;
+use App\Http\Requests\FileDownloadRequest;
 use App\Http\Requests\FileRequest;
 use App\Models\File;
 use App\Services\FileService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 
 class FileController extends Controller
@@ -27,11 +27,24 @@ class FileController extends Controller
     }
 
 
-    public function downloadFile(DownloadRequest $request): StreamedResponse
+    public function downloadFile(FileDownloadRequest $request): RedirectResponse
     {
         $fileId = $request->get('fileId');
         $file = File::find($fileId);
 
-        return Storage::disk('public')->download($file->getPublicPath());
+        Storage::disk('public')->download($file->getPublicPath());
+
+        return back();
+    }
+
+
+    public function deleteFile(FileDeleteRequest $request): RedirectResponse
+    {
+        $fileId = $request->get('fileId');
+        $file = File::find($fileId);
+        Storage::disk('public')->delete($file->path);
+        $file->delete();
+
+        return back();
     }
 }
