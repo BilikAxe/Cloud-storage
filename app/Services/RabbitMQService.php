@@ -2,13 +2,18 @@
 
 namespace App\Services;
 
-use App\Models\User;
-use Illuminate\Auth\Events\Registered;
+use App\Services\Consumes\EmailConsume;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
 class RabbitMQService
 {
+    private array $callback = [
+        'email' => [EmailConsume::class, 'sendRegistrationMessage'],
+        'delete' => [EmailConsume::class, 'sendADeleteMessage'],
+    ];
+
+
     /**
      * @throws \Exception
      */
@@ -34,18 +39,14 @@ class RabbitMQService
     {
         $connection = new AMQPStreamConnection(env('MQ_HOST'), env('MQ_PORT'), env('MQ_USER'), env('MQ_PASS'), env('MQ_VHOST'));
         $channel = $connection->channel();
-        $callback = null;
-        if ($queue === 'email') {
-            $callback = function ($msg) {
-                $user = User::find($msg->body);
-                event(new Registered($user));
-                echo ' [x] Received ', $user->email, "\n";
-            };
-        } elseif ($queue === 'delete') {
-            $callback = function ($msg) {
-
-            };
-        }
+        $callback = function ($msg) use ($queue) {
+            $handle = $this->callback[$queue];
+            list($obj, $method) = $handle;
+            if (! is_object($obj)) {
+                $obj = new $obj;
+            }
+            $obj->$method($msg);
+        };
         $channel->queue_declare($queue, false, false, false, false);
         $channel->basic_consume($queue, '', false, true, false, false, $callback);
         echo "Waiting for new message on $queue", " \n";

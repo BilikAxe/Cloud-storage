@@ -42,8 +42,9 @@ class FileController extends Controller
     {
         $fileId = $request->get('fileId');
         $file = File::find($fileId);
-        Storage::disk('public')->delete($file->path);
+        $path = $file->path;
         $file->delete();
+        Storage::disk('public')->delete($path);
 
         return back();
     }

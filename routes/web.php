@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\DirectoryController;
-use App\Http\Controllers\EmailVerificationNotificationController;
 use App\Http\Controllers\EmailVerificationPromptController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\UserController;
@@ -31,6 +30,8 @@ Route::middleware('guest')->group(function ()
     Route::get('/signup', [UserController::class, 'signUp'])
         ->name('signup');
     Route::post('/signup', [UserController::class, 'registrate']);
+
+
 });
 
 
