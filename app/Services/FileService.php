@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Storage;
 
 class FileService
 {
+    /**
+     * @throws \Throwable
+     */
     public function createFile(UploadedFile $uploadedFile, ?int $directoryId): void
     {
         $path = $uploadedFile->store('files', 'public');

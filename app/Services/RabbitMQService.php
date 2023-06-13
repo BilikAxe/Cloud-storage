@@ -2,15 +2,17 @@
 
 namespace App\Services;
 
-use App\Services\Consumes\EmailConsume;
+use App\Services\Consumers\ConsumerInterface;
+use App\Services\Consumers\DeleteFileEmailConsumer;
+use App\Services\Consumers\SendVerificationEmailConsumer;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
 class RabbitMQService
 {
-    private array $callback = [
-        'email' => [EmailConsume::class, 'sendRegistrationMessage'],
-        'delete' => [EmailConsume::class, 'sendADeleteMessage'],
+    private array $consumer = [
+        'email' => SendVerificationEmailConsumer::class,
+        'delete' => DeleteFileEmailConsumer::class,
     ];
 
 
@@ -40,12 +42,15 @@ class RabbitMQService
         $connection = new AMQPStreamConnection(env('MQ_HOST'), env('MQ_PORT'), env('MQ_USER'), env('MQ_PASS'), env('MQ_VHOST'));
         $channel = $connection->channel();
         $callback = function ($msg) use ($queue) {
-            $handle = $this->callback[$queue];
-            list($obj, $method) = $handle;
-            if (! is_object($obj)) {
-                $obj = new $obj;
+
+            $consumer = $this->consumer[$queue];
+            if (! isset($this->consumer[$queue])) {
+                throw new \Exception();
             }
-            $obj->$method($msg);
+
+            if ($consumer instanceof ConsumerInterface){
+                $consumer->handle($msg);
+            }
         };
         $channel->queue_declare($queue, false, false, false, false);
         $channel->basic_consume($queue, '', false, true, false, false, $callback);
