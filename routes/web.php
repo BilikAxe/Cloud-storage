@@ -31,12 +31,14 @@ Route::middleware('guest')->group(function ()
         ->name('signup');
     Route::post('/signup', [UserController::class, 'registrate']);
 
-
 });
 
 
 Route::middleware('auth')->group(function ()
 {
+    Route::post('/logout', [UserController::class, 'destroy'])
+        ->name('logout');
+
     Route::get('/email/verify', [EmailVerificationPromptController::class, '__invoke'])
         ->name('verification.notice');
     Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])

@@ -6,12 +6,12 @@ use App\Http\Requests\DirectoryDeleteRequest;
 use App\Http\Requests\DirectoryRequest;
 use App\Models\Directory;
 use App\Models\File;
+use App\Services\FileDeleteService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 
 
 class DirectoryController extends Controller
@@ -41,16 +41,13 @@ class DirectoryController extends Controller
     }
 
 
-    public function delete(DirectoryDeleteRequest $request): RedirectResponse
+    public function delete(DirectoryDeleteRequest $request, FileDeleteService $fileDeleteService): RedirectResponse
     {
         $directoryId = $request->get('directoryId');
-        dd(Directory::all()->where('parent_id', $directoryId));
-//        $files = File::all()->where('directory_id', $directoryId);
-//        foreach ($files as $file) {
-//            Storage::disk('public')->delete($file->path);
-//        }
-//
-//        Directory::find($directoryId)->delete();
+
+        $fileDeleteService->deleteFile($directoryId);
+
+        Directory::find($directoryId)->delete();
 
         return back();
     }

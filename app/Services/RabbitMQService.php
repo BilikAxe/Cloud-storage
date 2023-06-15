@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\ConsumerNotFoundException;
 use App\Services\Consumers\ConsumerInterface;
 use App\Services\Consumers\DeleteFileEmailConsumer;
 use App\Services\Consumers\SendVerificationEmailConsumer;
@@ -10,7 +11,7 @@ use PhpAmqpLib\Message\AMQPMessage;
 
 class RabbitMQService
 {
-    private array $consumer = [
+    private array $consumers = [
         'email' => SendVerificationEmailConsumer::class,
         'delete' => DeleteFileEmailConsumer::class,
     ];
@@ -43,14 +44,17 @@ class RabbitMQService
         $channel = $connection->channel();
         $callback = function ($msg) use ($queue) {
 
-            $consumer = $this->consumer[$queue];
-            if (! isset($this->consumer[$queue])) {
-                throw new \Exception();
+            if (! isset($this->consumers[$queue])) {
+                throw new ConsumerNotFoundException("Message: Not found queue " . $queue);
             }
 
-            if ($consumer instanceof ConsumerInterface){
-                $consumer->handle($msg);
+            $consumer = $this->consumers[$queue];
+            $obj = new $consumer();
+
+            if ($obj instanceof ConsumerInterface){
+                $obj->handle($msg);
             }
+
         };
         $channel->queue_declare($queue, false, false, false, false);
         $channel->basic_consume($queue, '', false, true, false, false, $callback);
