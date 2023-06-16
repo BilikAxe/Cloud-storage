@@ -6,7 +6,7 @@ use App\Http\Requests\DirectoryDeleteRequest;
 use App\Http\Requests\DirectoryRequest;
 use App\Models\Directory;
 use App\Models\File;
-use App\Services\FileDeleteService;
+use App\Services\DirectoryService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -41,13 +41,10 @@ class DirectoryController extends Controller
     }
 
 
-    public function delete(DirectoryDeleteRequest $request, FileDeleteService $fileDeleteService): RedirectResponse
+    public function delete(DirectoryDeleteRequest $request, DirectoryService $directoryClearService): RedirectResponse
     {
         $directoryId = $request->get('directoryId');
-
-        $fileDeleteService->deleteFile($directoryId);
-
-        Directory::find($directoryId)->delete();
+        $directoryClearService->clearDirectory($directoryId);
 
         return back();
     }

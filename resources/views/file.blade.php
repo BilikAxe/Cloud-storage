@@ -27,6 +27,8 @@
             <span class='label-text'>{{ $message }}</span>
             @enderror
         </div>
+        <label>File lifetime up to (optional):</label>
+        <input type="datetime-local" name="die">
         <button type="submit">Save</button>
     </form>
 

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class File extends Model
 {
@@ -18,11 +19,19 @@ class File extends Model
         'user_id',
         'path',
         'directory_id',
+        'die_at',
     ];
 
 
     public function getPublicPath(): string
     {
         return $this->path;
+    }
+
+
+    public function delete(): ?bool
+    {
+        Storage::disk('public')->delete($this->path);
+        return parent::delete();
     }
 }

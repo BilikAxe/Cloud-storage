@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('path');
             $table->integer('directory_id')->unsigned()->index()->nullable();
             $table->foreign('directory_id')->references('id')->on('directories')->onDelete('cascade');
+            $table->timestamp('die_at')->nullable();
             $table->timestamps();
         });
     }

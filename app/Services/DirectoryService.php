@@ -6,9 +6,9 @@ use App\Models\Directory;
 use App\Models\File;
 use Illuminate\Support\Facades\Storage;
 
-class FileDeleteService
+class DirectoryService
 {
-    public function deleteFile(int $parentId): void
+    public function clearDirectory(int $parentId): void
     {
         $files = File::all()->where('directory_id', $parentId);
 
@@ -19,7 +19,9 @@ class FileDeleteService
         $directories = Directory::all()->where('parent_id', $parentId);
 
         foreach ($directories as $directory) {
-            $this->deleteFile($directory->id);
+            $this->clearDirectory($directory->id);
         }
+
+        Directory::find($parentId)->delete();
     }
 }
