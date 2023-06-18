@@ -6,17 +6,19 @@ use App\Http\Requests\FileDeleteRequest;
 use App\Http\Requests\FileDownloadRequest;
 use App\Http\Requests\FileRequest;
 use App\Models\File;
-use App\Models\User;
 use App\Services\FileService;
 use App\Services\RabbitMQService;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 
 class FileController extends Controller
 {
+    public function __construct(private RabbitMQService $rabbitMQService)
+    {
+    }
+
     /**
      * @throws \Throwable
      */
@@ -52,15 +54,25 @@ class FileController extends Controller
     }
 
 
-    public function deleteOldFile(): RedirectResponse
+    public function deleteOldFile(): void
     {
         $currentTime = Carbon::now();
         $files = File::all()->where('die_at', '<', $currentTime);
 
         foreach ($files as $file) {
             $file->delete();
+            $this->rabbitMQService->publish($file->id, 'deleted');
         }
+    }
 
-        return redirect()->route('main');
+
+    public function searchOldFile(): void
+    {
+        $currentTime = Carbon::now();
+        $files = File::all()->where('die_at', '<', $currentTime->addDay());
+
+        foreach ($files as $file) {
+            $this->rabbitMQService->publish($file->id, 'willBeDelete');
+        }
     }
 }

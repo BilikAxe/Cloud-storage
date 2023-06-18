@@ -1,5 +1,6 @@
+<!DOCTYPE html>
 <head>
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <form method="post" action="{{ route('logout') }}">
         @csrf
 
@@ -17,19 +18,20 @@
         <button type="submit" >Create</button>
     </form>
 
-    <form method="post" action="{{ route('add') }}" enctype="multipart/form-data">
+    <form id="myForm" name="myForm" method="post" action="{{ route('add') }}" enctype="multipart/form-data">
         @csrf
-        <div class="form-group">
+        <div class="form-group" style="margin-top: 20px;">
             <lable for="file">Upload file</lable>
-            <input type="file" name="file" class="form-control">
-            <input type="hidden" name="directoryId" value="{{ $id }}"
+            <input id="file" type="file" name="file" class="form-control">
             @error('file')
             <span class='label-text'>{{ $message }}</span>
             @enderror
+            <input id="directoryId" type="hidden" name="directoryId" value="{{ $id }}">
+            <label>File lifetime up to (optional):</label>
+            <input id="die" type="datetime-local" name="die">
+
+            <button class="btnSave" type="submit">Save</button>
         </div>
-        <label>File lifetime up to (optional):</label>
-        <input type="datetime-local" name="die">
-        <button type="submit">Save</button>
     </form>
 
 </head>
@@ -82,6 +84,48 @@
     @endforeach
 
 </body>
+
+{{--<script--}}
+{{--    src="https://code.jquery.com/jquery-3.7.0.min.js"--}}
+{{--    integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="--}}
+{{--    crossorigin="anonymous">--}}
+{{--</script>--}}
+
+{{--<script type="text/javascript">--}}
+
+{{--    $(document).ready(function () {--}}
+
+{{--        $.ajaxSetup({--}}
+{{--            headers: {--}}
+{{--                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')--}}
+{{--            }--}}
+{{--        });--}}
+
+{{--        $('#myForm:first').submit(function (e) {--}}
+{{--            e.preventDefault();--}}
+{{--            var formData = new FormData(this);--}}
+
+{{--            $.ajax({--}}
+{{--                type: 'POST',--}}
+{{--                url: $(this).attr('action'),--}}
+{{--                data: formData,--}}
+{{--                cache: false,--}}
+{{--                dataType: 'json',--}}
+{{--                contentData: false,--}}
+{{--                processData: false,--}}
+{{--                success: function (data) {--}}
+{{--                    console.log('success');--}}
+{{--                    console.log(data);--}}
+{{--                },--}}
+{{--                error: function(data) {--}}
+{{--                    console.log(data);--}}
+
+{{--                }--}}
+{{--            });--}}
+{{--        });--}}
+{{--    });--}}
+
+{{--</script>--}}
 
 <style>
 

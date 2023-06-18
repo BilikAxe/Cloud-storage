@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->call(function (FileController $fileController) {
+            $fileController->searchOldFile();
             $fileController->deleteOldFile();
         })->everyMinute();
     }

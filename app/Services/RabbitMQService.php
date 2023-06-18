@@ -4,7 +4,8 @@ namespace App\Services;
 
 use App\Exceptions\ConsumerNotFoundException;
 use App\Services\Consumers\ConsumerInterface;
-use App\Services\Consumers\DeleteFileEmailConsumer;
+use App\Services\Consumers\FileDeletedEmailConsumer;
+use App\Services\Consumers\FileWillBeDeletedEmailConsumer;
 use App\Services\Consumers\SendVerificationEmailConsumer;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
@@ -13,7 +14,8 @@ class RabbitMQService
 {
     private array $consumers = [
         'email' => SendVerificationEmailConsumer::class,
-        'delete' => DeleteFileEmailConsumer::class,
+        'willBeDelete' => FileWillBeDeletedEmailConsumer::class,
+        'deleted' => FileDeletedEmailConsumer::class,
     ];
 
 

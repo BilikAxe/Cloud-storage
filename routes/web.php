@@ -61,5 +61,6 @@ Route::middleware('auth')->group(function ()
         ->name('deleteDirectory');
 });
 
-Route::get('/deleteOldFile', [FileController::class, 'deleteOldFile']);
+Route::get('/delete-old-file', [FileController::class, 'deleteOldFile']);
+Route::get('/search-old-file', [FileController::class, 'searchOldFile']);
 
