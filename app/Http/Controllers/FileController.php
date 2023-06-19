@@ -60,8 +60,8 @@ class FileController extends Controller
         $files = File::all()->where('die_at', '<', $currentTime);
 
         foreach ($files as $file) {
-            $file->delete();
             $this->rabbitMQService->publish($file->id, 'deleted');
+            $file->delete();
         }
     }
 

@@ -19,7 +19,7 @@ class Kernel extends ConsoleKernel
         $schedule->call(function (FileController $fileController) {
             $fileController->searchOldFile();
             $fileController->deleteOldFile();
-        })->everyMinute();
+        })->dailyAt('15:00');
     }
 
     /**

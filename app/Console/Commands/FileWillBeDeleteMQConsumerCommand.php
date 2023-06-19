@@ -5,14 +5,14 @@ namespace App\Console\Commands;
 use App\Services\RabbitMQService;
 use Illuminate\Console\Command;
 
-class DeleteFileMQConsumerCommand extends Command
+class FileWillBeDeleteMQConsumerCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'mq:delete';
+    protected $signature = 'mq:willBeDelete';
 
     /**
      * The console command description.
@@ -22,12 +22,13 @@ class DeleteFileMQConsumerCommand extends Command
     protected $description = 'Command description';
 
     /**
+     * Execute the console command.
      *
      * @throws \Exception
      */
     public function handle(): void
     {
         $mqService = new RabbitMQService();
-        $mqService->consume('deleted');
+        $mqService->consume('willBeDelete');
     }
 }

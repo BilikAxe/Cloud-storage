@@ -4,17 +4,12 @@ namespace App\Services\Consumers;
 
 use App\Mail\FileWillBeDeletedMail;
 use App\Models\File;
-use App\Models\User;
-use Illuminate\Support\Facades\Mail;
-use PhpAmqpLib\Message\AMQPMessage;
+use Illuminate\Mail\Mailable;
 
-class FileWillBeDeletedEmailConsumer implements ConsumerInterface
+class FileWillBeDeletedEmailConsumer extends FileDeletedEmailConsumer
 {
-    public function handle(AMQPMessage $msg): void
+    public function getMail(File $file): Mailable
     {
-        $file = File::find($msg->body);
-        $user = User::find($file->user_id);
-        Mail::to($user->email)->send(new FileWillBeDeletedMail($file));
-        echo ' [x] Received ', $user->email, "\n";
+        return new FileWillBeDeletedMail($file);
     }
 }
