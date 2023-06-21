@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <head>
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <form method="post" action="{{ route('logout') }}">
         @csrf
 
         <button class="logout">Log Out</button>
     </form>
+
+    <div class="weather">
+        @include('weather')
+    </div>
 
     <form method="post" action="{{ route('directory') }}">
         @csrf
@@ -128,6 +133,11 @@
 {{--</script>--}}
 
 <style>
+    .weather {
+        position: relative;
+        top: 0;
+        left: 1600px;
+    }
 
     .logout {
         position: relative;
