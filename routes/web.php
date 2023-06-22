@@ -64,4 +64,6 @@ Route::middleware('auth')->group(function ()
 
 Route::get('/delete-old-file', [FileController::class, 'deleteOldFile']);
 Route::get('/search-old-file', [FileController::class, 'searchOldFile']);
-Route::get('/weather', [WeatherController::class, 'getWeather']);
+Route::get('/weather', [WeatherController::class, 'getWeather'])->name('weather');
+Route::post('/weather', [WeatherController::class, 'getWeather'])->name('weather');
+
