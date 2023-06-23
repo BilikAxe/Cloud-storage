@@ -1,57 +1,57 @@
-<div class="weatherBlock">
 
-    <form class="weather" method="post" action="/weather">
-        @csrf
 
-        <div class="container-wrapper">
-            <div class="container">
-                <div>
+<form class="weather" method="post" action="/weather">
+    @csrf
+
+    <div class="container-wrapper">
+        <div class="container">
+            <div class="weatherBlock">
+                <div style="margin-bottom: 20px;">
                     <label style="text-align: center; color: black;">Weather</label><br><br>
                     <a class="city" style="color: black;">{{ $weather->name }}</a><br>
                     <a class="temp" style="color: black;">{{ round($weather->main->temp) }} &degC</a>
                 </div>
-                <h1 class="status"></h1>
-
-                <label for="lng">Longitude:</label>
-                <input type="text" id="lng" name="lng"><br><br>
-
-                <label for="ltd">Latitude:</label>
-                <input type="text" id="ltd" name="ltd"><br><br>
-
-                <button class="getCoords">Get location</button>
+{{--                <button class="getCoords">Get location</button>--}}
                 <button class="btn-w" id="button">Get temperature</button>
+                <h1 class="status"></h1>
             </div>
-            <script>
-                const lngInput = document.querySelector('#lng');
-                const ltdInput = document.querySelector('#ltd');
+{{--                <label for="lng">Longitude:</label>--}}
+                <input type="hidden" id="lng" name="lng"><br><br>
 
-                const success = (position) => {
-                    const latitude = position.coords.latitude;
-                    const longitude = position.coords.longitude;
-
-                    ltdInput.value = latitude;
-                    lngInput.value = longitude;
-                };
-
-                const getCoords = (event) => {
-                    event.preventDefault();
-
-                    const status = document.querySelector('.status');
-
-                    const error = () => {
-                        status.textContent = 'Failed attempt';
-                    };
-
-                    navigator.geolocation.getCurrentPosition(success, error);
-                };
-
-                document.querySelector('.getCoords').addEventListener('click', getCoords);
-
-            </script>
+{{--                <label for="ltd">Latitude:</label>--}}
+                <input type="hidden" id="ltd" name="ltd"><br><br>
         </div>
-    </form>
+        <script>
+            const lngInput = document.querySelector('#lng');
+            const ltdInput = document.querySelector('#ltd');
 
-</div>
+            const success = (position) => {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+
+                ltdInput.value = latitude;
+                lngInput.value = longitude;
+            };
+
+            const getCoords = (event) => {
+                event.preventDefault();
+
+                const status = document.querySelector('.status');
+
+                const error = () => {
+                    status.textContent = 'Failed attempt';
+                };
+
+                navigator.geolocation.getCurrentPosition(success, error);
+            };
+
+            document.addEventListener('DOMContentLoaded', getCoords);
+
+
+        </script>
+    </div>
+</form>
+
 
 
 <script

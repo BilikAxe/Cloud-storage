@@ -26,7 +26,10 @@ class DirectoryController extends Controller
         $files = File::all()->where('user_id', Auth::id())->where('directory_id', $id);
         $directories = Directory::all()->where('user_id', Auth::id())->where('parent_id', $id);
 
-        $weather = $this->weatherService->getWeather($request);
+        $latitude = round((float)$request->get('ltd'), 1);
+        $longitude = round((float)$request->get('lng'), 1);
+
+        $weather = $this->weatherService->getWeather($latitude, $longitude);
 
         return view('file', [
             'id' => $id,

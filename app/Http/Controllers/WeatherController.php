@@ -12,7 +12,10 @@ class WeatherController extends Controller
     }
     public function getWeather(Request $request): bool|string
     {
-        $weather = $this->weatherService->getWeather($request);
+        $latitude = round((float)$request->get('ltd'), 1);
+        $longitude = round((float)$request->get('lng'), 1);
+
+        $weather = $this->weatherService->getWeather($latitude, $longitude);
 
         return json_encode([
             'city' => $weather->name,
