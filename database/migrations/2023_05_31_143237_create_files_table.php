@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('user_id')->unsigned()->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('path');
+            $table->string('owner');
             $table->integer('directory_id')->unsigned()->index()->nullable();
             $table->foreign('directory_id')->references('id')->on('directories')->onDelete('cascade');
             $table->timestamp('die_at')->nullable();

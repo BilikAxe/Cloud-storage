@@ -6,6 +6,7 @@ use App\Http\Requests\DirectoryDeleteRequest;
 use App\Http\Requests\DirectoryRequest;
 use App\Models\Directory;
 use App\Models\File;
+use App\Models\User;
 use App\Services\DirectoryService;
 use App\Services\WeatherService;
 use Illuminate\Contracts\Foundation\Application;
@@ -21,10 +22,37 @@ class DirectoryController extends Controller
     public function __construct(public WeatherService $weatherService)
     {
     }
+
+
     public function openHomePage(Request $request, int $id=null): Factory|View|Application
     {
+//        dd($request->all());
         $files = File::all()->where('user_id', Auth::id())->where('directory_id', $id);
         $directories = Directory::all()->where('user_id', Auth::id())->where('parent_id', $id);
+
+        $search = $request->get('search');
+        if ($search !== null) {
+            $files = File::where('name', 'ilike', '%' . $search . '%')->orWhere('owner', 'ilike', '%' . $search . '%')->get();
+            $directories = Directory::where('name', 'ilike', '%' . $search . '%')->orWhere('owner', 'ilike', '%' . $search . '%')->get();
+        }
+
+        $filterByName = $request->get('fileName');
+        if ($filterByName !== null) {
+            $files = File::all()->where('name', $filterByName);
+            $directories = Directory::all()->where('name', $filterByName);
+        }
+
+        $filterBySize = (int)$request->get('fileSize');
+        if ($filterBySize !== null) {
+            $files = File::all()->where('size', $filterBySize);
+            $directories = Directory::all()->where('size', $filterBySize);
+        }
+
+        $filterByOwner = $request->get('fileOwner');
+        if ($filterByOwner !== null) {
+            $files = File::all()->where('owner', $filterByOwner);
+            $directories = Directory::all()->where('owner', $filterByOwner);
+        }
 
         $latitude = round((float)$request->get('ltd'), 1);
         $longitude = round((float)$request->get('lng'), 1);
@@ -42,10 +70,14 @@ class DirectoryController extends Controller
 
     public function create(DirectoryRequest $request): RedirectResponse
     {
+        $owner = Auth::user();
+//        dd($owner);
+
         Directory::create([
-            'name' => $request->get('directoryName'),
-            'user_id' => Auth::id(),
-            'parent_id' => $request->get('parentId'),
+            'name'          => $request->get('directoryName'),
+            'user_id'       => Auth::id(),
+            'parent_id'     => $request->get('parentId'),
+            'owner'         => $owner->user_name,
         ]);
 
         return back();

@@ -60,6 +60,10 @@ Route::middleware('auth')->group(function ()
         ->name('directory');
     Route::post('/directory/delete', [DirectoryController::class, 'delete'])
         ->name('deleteDirectory');
+    Route::post('/search', [DirectoryController::class, 'openHomePage'])
+        ->name('search');
+    Route::get('/search', [DirectoryController::class, 'openHomePage'])
+        ->name('search');
 });
 
 Route::get('/delete-old-file', [FileController::class, 'deleteOldFile']);

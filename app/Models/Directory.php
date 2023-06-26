@@ -15,5 +15,6 @@ class Directory extends Model
         'name',
         'user_id',
         'parent_id',
+        'owner',
     ];
 }

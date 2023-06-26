@@ -1,20 +1,25 @@
 <!DOCTYPE html>
 <head>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
     <form method="post" action="{{ route('logout') }}">
         @csrf
-
         <button class="logout">Log Out</button>
+    </form>
+    <form action="{{ route('main') }}" method="get">
+        <button class="main"></button>
+    </form>
+    <form class="search-group" method="post" action="{{ route('search') }}">
+        @csrf
+        <label style="position: relative; left: 680px;">Search</label>
+        <input class="search" name="search" type="search" id="search" value="">
+        <button class="btn-search" type="submit">Search</button>
     </form>
 </head>
 
 <body>
-
     <div class="weather">
         @include('weather')
     </div>
-
     <div class="create">
         <form method="post" action="{{ route('directory') }}">
             @csrf
@@ -22,13 +27,12 @@
                 <input style="margin-top: 20px;" type="text" name="directoryName" value="Untitled">
             </label>
             @error('directoryName')
-            <span class='label-text'>{{ $message }}</span>
+            <span class='label-text-dir'>{{ $message }}</span>
             @enderror
             <input type="hidden" name="parentId" value="{{ $id }}">
             <button type="submit" >Create</button>
         </form>
     </div>
-
     <div class="save">
         <form id="myForm" name="myForm" method="post" action="{{ route('add') }}" enctype="multipart/form-data">
             @csrf
@@ -36,7 +40,7 @@
                 <input style="margin-bottom: 20px;" id="file" type="file" name="file" class="form-control">
             </lable>
             @error('file')
-            <span class='label-text'>{{ $message }}</span>
+            <span class='label-text-file'>{{ $message }}</span>
             @enderror
             <input id="directoryId" type="hidden" name="directoryId" value="{{ $id }}">
             <label>File lifetime up to (optional):
@@ -45,11 +49,28 @@
             <button class="btn-save" type="submit">Save</button>
         </form>
     </div>
-
     <table style="margin-top: 20px; margin-bottom: 1px">
-        <td class="name">File name</td>
-        <td class="size">Size</td>
-        <td class="user">Owner</td>
+        <td class="name">File name
+            <form action="{{ route('search') }}" method="post">
+                @csrf
+                <input style="width: 300px;" class="titFileName" name="fileName">
+                <button type="submit">Search</button>
+            </form>
+        </td>
+        <td class="size">Size
+            <form action="{{ route('search') }}" method="post">
+                @csrf
+                <input style="width: 150px;" class="titSize" name="fileSize">
+                <button type="submit">Search</button>
+            </form>
+        </td>
+        <td class="owner">Owner
+            <form action="{{ route('search') }}" method="post">
+                @csrf
+                <input style="width: 150px;" class="titOwner" name="fileOwner">
+                <button type="submit">Search</button>
+            </form>
+        </td>
         <td class="open">Open</td>
         <td class="download">Download</td>
         <td class="delete">Delete</td>
@@ -59,7 +80,7 @@
             <table>
                 <td class="name"> {{ $directory->name }} </td>
                 <td class="size">--</td>
-                <td class="user"> {{ Auth::user()->user_name }} </td>
+                <td class="owner"> {{ $directory->owner }} </td>
                 <td class="open">
                     <a style="text-decoration: none; margin: 20px;" href="/directory/{{ $directory->id }}">Open</a>
                 </td>
@@ -79,7 +100,7 @@
             <table>
                 <td class="name"> {{ $file->name }} </td>
                 <td class="size"> {{ $file->size }} KB </td>
-                <td class="user"> {{ Auth::user()->user_name }} </td>
+                <td class="owner"> {{ $file->owner }} </td>
                 <td class="open">
                     <a style="text-decoration: none; margin: 20px" href="{{ asset("/storage/$file->path") }}">Open</a>
                 </td>
@@ -100,7 +121,6 @@
             </table>
         </div>
     @endforeach
-
 </body>
 
 {{--<script--}}
@@ -151,31 +171,72 @@
         background-color: #f1f1f1;
         position: relative;
         top: -300px;
-        width: 1700px; /* Ширина таблицы */
-        border: 1px solid black; /* Рамка вокруг таблицы */
-        margin: auto; /* Выравниваем таблицу по центру окна  */
+        width: 1700px;
+        border: 1px solid black;
+        margin: auto;
         border-radius: 10px;
     }
     td {
         /*border: 1px solid #333;*/
-        /*text-align: center; !* Выравниваем текст по центру ячейки *!*/
+    }
+
+    button {
+        cursor: pointer;
+    }
+
+    .main {
+        position: relative;
+        /*left: 100px;*/
+        bottom: 20px;
+        width: 50px;
+        height: 50px;
+        border: none;
+        border-radius: 50px;
+        background-size: cover;
+        background-image: url("https://cdn.icon-icons.com/icons2/1458/PNG/512/homebutton_99695.png");
+    }
+
+    .main:hover {
+        opacity: 0.8;
+    }
+
+    .search-group {
+        position: relative;
+        bottom: 70px;
+    }
+
+    .main:active {
+        transform: scale(0.95);
+    }
+
+
+    .btn-search {
+        position: relative;
+        left: 700px;
     }
 
     .name {
-        width: 500px;
+        width: 400px;
     }
 
     .size {
         text-align: center;
-        width: 100px;
+        width: 200px;
     }
 
-    .user {
+    .owner {
         text-align: center;
-        width: 400px;
+        width: 200px;
     }
+
+    .search {
+        position: relative;
+        left: 690px;
+        width: 400px;
+     }
 
     .weather {
+        position: relative;
         margin-bottom: 20px;
     }
 
@@ -185,7 +246,7 @@
     }
 
     .download {
-        width: 200px;
+        width: 150px;
         text-align: center;
     }
 
@@ -197,7 +258,7 @@
 
     .delete {
         text-align: center;
-        width: 150px;
+        width: 100px;
     }
 
     body {
@@ -212,8 +273,12 @@
         border-radius: 10px;
         /*box-shadow: -11px 11px 22px deepskyblue, 11px -11px 22px deepskyblue;*/
         padding: 20px;
-        top: -310px;
+        top: -330px;
         left: 750px;
         margin-bottom: 20px;
+    }
+
+    .label-text-file {
+        color: red;
     }
 </style>

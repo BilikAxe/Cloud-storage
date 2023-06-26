@@ -18,6 +18,7 @@ class File extends Model
         'size',
         'user_id',
         'path',
+        'owner',
         'directory_id',
         'die_at',
     ];

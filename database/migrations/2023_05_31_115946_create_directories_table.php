@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->integer('user_id')->unsigned()->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('owner');
             $table->integer('parent_id')->unsigned()->index()->nullable();
             $table->foreign('parent_id')->references('id')->on('directories')->onDelete('cascade');
             $table->timestamps();
