@@ -26,7 +26,6 @@ class DirectoryController extends Controller
 
     public function openHomePage(Request $request, int $id=null): Factory|View|Application
     {
-//        dd($request->all());
         $files = File::all()->where('user_id', Auth::id())->where('directory_id', $id);
         $directories = Directory::all()->where('user_id', Auth::id())->where('parent_id', $id);
 
@@ -34,24 +33,6 @@ class DirectoryController extends Controller
         if ($search !== null) {
             $files = File::where('name', 'ilike', '%' . $search . '%')->orWhere('owner', 'ilike', '%' . $search . '%')->get();
             $directories = Directory::where('name', 'ilike', '%' . $search . '%')->orWhere('owner', 'ilike', '%' . $search . '%')->get();
-        }
-
-        $filterByName = $request->get('fileName');
-        if ($filterByName !== null) {
-            $files = File::all()->where('name', $filterByName);
-            $directories = Directory::all()->where('name', $filterByName);
-        }
-
-        $filterBySize = (int)$request->get('fileSize');
-        if ($filterBySize !== null) {
-            $files = File::all()->where('size', $filterBySize);
-            $directories = Directory::all()->where('size', $filterBySize);
-        }
-
-        $filterByOwner = $request->get('fileOwner');
-        if ($filterByOwner !== null) {
-            $files = File::all()->where('owner', $filterByOwner);
-            $directories = Directory::all()->where('owner', $filterByOwner);
         }
 
         $latitude = round((float)$request->get('ltd'), 1);
